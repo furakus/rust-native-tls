@@ -30,6 +30,14 @@ fn supported_protocols(protocols: &[Protocol], ctx: &mut SslContextBuilder) {
         options &= !op;
     }
     ctx.set_options(options);
+    // Hardening TLSv1.2, suggested by https://wiki.mozilla.org/Security/Server_Side_TLS.
+    if protocols == &[Protocol::Tlsv12] {
+        ctx.set_cipher_list("ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:\
+                            ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:\
+                            ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:\
+                            ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA384:\
+                            ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA256").unwrap();
+    }
 }
 
 pub struct Error(ssl::Error);

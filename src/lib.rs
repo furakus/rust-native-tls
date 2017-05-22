@@ -290,7 +290,7 @@ impl<S> From<imp::HandshakeError<S>> for HandshakeError<S> {
 }
 
 /// SSL/TLS protocol versions.
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq)]
 pub enum Protocol {
     /// The SSL 3.0 protocol.
     ///
