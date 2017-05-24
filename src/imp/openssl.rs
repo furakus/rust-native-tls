@@ -253,7 +253,7 @@ impl TlsAcceptor {
         Ok(TlsAcceptorBuilder(builder))
     }
 
-    pub fn builder_from_pem(pkey_pem: &[u8], fullchain_pem: &[u8]) -> Result<TlsAcceptorBuilder, Error> {
+    pub fn builder_from_pem(fullchain_pem: &[u8], pkey_pem: &[u8]) -> Result<TlsAcceptorBuilder, Error> {
         let fullchain = try!(X509::stack_from_pem(fullchain_pem));
         let pkey = try!(PKey::private_key_from_pem(pkey_pem));
         let cert = fullchain.first().expect("No certificate");

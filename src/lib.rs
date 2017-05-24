@@ -486,8 +486,8 @@ impl TlsAcceptor {
 
     /// Returns a new builder for a `TlsAcceptor`.
     #[cfg(not(any(target_os = "macos", target_os = "windows")))]
-    pub fn builder_from_pem(pkey_pem: &[u8], fullchain_pem: &[u8]) -> Result<TlsAcceptorBuilder> {
-        let builder = try!(imp::TlsAcceptor::builder_from_pem(pkey_pem, fullchain_pem));
+    pub fn builder_from_pem(fullchain_pem: &[u8], pkey_pem: &[u8]) -> Result<TlsAcceptorBuilder> {
+        let builder = try!(imp::TlsAcceptor::builder_from_pem(fullchain_pem, pkey_pem));
         Ok(TlsAcceptorBuilder(builder))
     }
 
