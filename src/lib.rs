@@ -484,6 +484,13 @@ impl TlsAcceptor {
         Ok(TlsAcceptorBuilder(builder))
     }
 
+    /// Returns a new builder for a `TlsAcceptor`.
+    #[cfg(not(any(target_os = "macos", target_os = "windows")))]
+    pub fn builder_from_pem(pkey_pem: &[u8], fullchain_pem: &[u8]) -> Result<TlsAcceptorBuilder> {
+        let builder = try!(imp::TlsAcceptor::builder_from_pem(pkey_pem, fullchain_pem));
+        Ok(TlsAcceptorBuilder(builder))
+    }
+
     /// Initiates a TLS handshake.
     ///
     /// If the socket is nonblocking and a `WouldBlock` error is returned during
