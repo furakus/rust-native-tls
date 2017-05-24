@@ -4,6 +4,7 @@ use std::io;
 use std::fmt;
 use std::error;
 use self::openssl::pkcs12;
+use self::openssl::pkey::PKey;
 use self::openssl::error::ErrorStack;
 use self::openssl::ssl::{self, SslMethod, SslConnectorBuilder, SslConnector, SslAcceptorBuilder,
                          SslAcceptor, MidHandshakeSslStream, SslContextBuilder};
@@ -249,6 +250,17 @@ impl TlsAcceptor {
                                                                     &pkcs12.0.pkey,
                                                                     &pkcs12.0.cert,
                                                                     &pkcs12.0.chain));
+        Ok(TlsAcceptorBuilder(builder))
+    }
+
+    pub fn builder_from_pem(pkey_pem: &[u8], fullchain_pem: &[u8]) -> Result<TlsAcceptorBuilder, Error> {
+        let fullchain = try!(X509::stack_from_pem(fullchain_pem));
+        let pkey = try!(PKey::private_key_from_pem(pkey_pem));
+        let cert = fullchain.first().expect("No certificate");
+        let builder = try!(SslAcceptorBuilder::mozilla_intermediate(SslMethod::tls(),
+                                                                    &pkey,
+                                                                    &cert,
+                                                                    &fullchain));
         Ok(TlsAcceptorBuilder(builder))
     }
 
