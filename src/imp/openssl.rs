@@ -260,7 +260,7 @@ impl TlsAcceptor {
         let builder = try!(SslAcceptorBuilder::mozilla_intermediate(SslMethod::tls(),
                                                                     &pkey,
                                                                     &cert,
-                                                                    &fullchain));
+                                                                    &fullchain[1..]));
         Ok(TlsAcceptorBuilder(builder))
     }
 
